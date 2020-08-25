@@ -30,7 +30,8 @@ int write_files(char *cwd, const char *filename, const char *js_class_name, cons
 	      "</html>\n");
       break;
     case 1:       //js file
-      fprintf(f_ptr, "'use strict'");
+      fprintf(f_ptr,
+	      "'use strict'");
       break;
     case 2:       //css file
       fprintf(f_ptr,
@@ -54,9 +55,9 @@ char * build_file_path(char *cwd, const char *filename, char *file_ext){
   }
   
   int output_len = 0;
-  output_len = snprintf(full_path,
-			BUFFER_MAX,
+  output_len = snprintf(full_path,BUFFER_MAX,
 			"%s/%s%s", cwd, filename, file_ext);
+  
   if(output_len >= BUFFER_MAX){
     fprintf(stderr, "your file path is likely corrupted due to\n"
 	    "buffer overrun");
@@ -64,3 +65,9 @@ char * build_file_path(char *cwd, const char *filename, char *file_ext){
   return full_path;
 }
 
+char * build_custom_html_tag(const char *custom_html_tag){
+
+}
+char * build_template_tag(const char *filename, const char *custom_html_tag){
+
+}

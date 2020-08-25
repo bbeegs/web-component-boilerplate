@@ -20,7 +20,7 @@ int main(int argc, char **argv){
 	    "Invalid argument length\n"
 	    "Compgen expects 3 arguments: filename, javascript "
 	    "component class name, and custom html tag\n"
-	    "Ex: my_web_component MyWebComponent my-web-comp\n" );
+	    "{filename} {js-comp-name} {custom-html-tag}\n" );
     goto exit_on_error;
   }
 
