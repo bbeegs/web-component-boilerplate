@@ -9,4 +9,4 @@ main: main.c compgen.o
 compgen.o: compgen.c
 	$(CC) -c compgen.c $(CFLAGS)
 clean:
-	rm *.o main
+	rm *.o

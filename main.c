@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "compgen.h"
 #define  BUFFER_MAX 200
-
+#define EXPECTED_ARGS 4
 
 int main(int argc, char **argv){
 
@@ -15,11 +15,10 @@ int main(int argc, char **argv){
   const char *custom_html_tag;
   
   //check for the only arg that should be present
-  if(argc != 4){
+  if(argc != EXPECTED_ARGS){
     fprintf(stderr,
 	    "Invalid argument length\n"
-	    "Compgen expects 3 arguments: filename, javascript "
-	    "component class name, and custom html tag\n"
+	    "Compgen expects 3 arguments:\n"
 	    "{filename} {js-comp-name} {custom-html-tag}\n" );
     goto exit_on_error;
   }
@@ -29,6 +28,7 @@ int main(int argc, char **argv){
   js_class_name = argv[2];
   custom_html_tag = argv[3];
 
+  //ensure html custom component name contains a dash
   if(strchr(custom_html_tag, '-') == NULL){
     fprintf(stderr, "custom html tag must contain a dash\n");
     goto exit_on_error;
@@ -40,11 +40,13 @@ int main(int argc, char **argv){
     goto exit_on_error;
   }
   
-  
-  write_files(base_path, filename, js_class_name, custom_html_tag);
-  
+  //write .html, .js, .css
+  if(write_files(base_path, filename, js_class_name, custom_html_tag) < 0){
+    fprintf(stderr, "error writing files.");
+    goto exit_on_error;
+  }  
  exit_on_error:
-  return -1;
+  return EXIT_FAILURE;
 
-  return 0;
+  return EXIT_SUCCESS;
 }

@@ -5,20 +5,26 @@
 #include "compgen.h"
 #define  LG_BUFFER_MAX 300
 #define  SM_BUFFER_MAX 150
-int write_files(char *cwd, const char *filename, const char *js_class_name, const char *custom_html_tag){
+
+int write_files(char *cwd, const char *filename, const char *js_class_name,
+		const char *custom_html_tag){
 
   char exts[3][6] = {".html", ".js", ".css"};
   FILE *f_ptr;
+
   for(size_t i = 0; i < 3; i++){
     char * filepath = build_file_path(cwd, filename,*(exts+i));
     f_ptr = fopen(filepath, "w");
     if(f_ptr == NULL){
-      return -1;
+      return EXIT_FAILURE;
     }
     switch (i){
     case 0:; //html file
       char * custom_tag = build_custom_html_tag(custom_html_tag);
-      char * template_tag = build_template_tag(filename, custom_html_tag); 
+      char * template_tag = build_template_tag(filename, custom_html_tag);
+      if(custom_tag == NULL || template_tag == NULL){
+	return EXIT_FAILURE;
+      }
       fprintf(f_ptr,
 	      "<!DOCTYPE html>\n"
 	      "<html>\n"
@@ -48,7 +54,7 @@ int write_files(char *cwd, const char *filename, const char *js_class_name, cons
     printf("%s\n", filepath);
     free(filepath);
   }
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 
@@ -58,6 +64,7 @@ char * build_file_path(char *cwd, const char *filename, char *file_ext){
   if (full_path == NULL){
     free(full_path);
     fprintf(stderr, "malloc failed - get more memory");
+    goto STRING_OP_FAIL;
   }
   
   int output_len = 0;
@@ -67,8 +74,12 @@ char * build_file_path(char *cwd, const char *filename, char *file_ext){
   if(output_len >= LG_BUFFER_MAX){
     fprintf(stderr, "your file path is likely corrupted due to\n"
 	    "buffer overrun");
+    goto STRING_OP_FAIL;
   }
   return full_path;
+
+ STRING_OP_FAIL:
+  return NULL;
 }
 
 char * build_custom_html_tag(const char *custom_html_tag){
@@ -77,6 +88,7 @@ char * build_custom_html_tag(const char *custom_html_tag){
   if (full_tag == NULL){
     free(full_tag);
     fprintf(stderr, "malloc failed - get more memory");
+    goto STRING_OP_FAIL;
   }
   
   int output_len = 0;
@@ -85,9 +97,12 @@ char * build_custom_html_tag(const char *custom_html_tag){
   
   if(output_len >= SM_BUFFER_MAX){
     fprintf(stderr, "Issue creating custom tag");
+    goto STRING_OP_FAIL;
   }
   return full_tag;
 
+ STRING_OP_FAIL:
+  return NULL;
 }
 
 char * build_template_tag(const char *filename, const char *custom_html_tag){
@@ -97,6 +112,7 @@ char * build_template_tag(const char *filename, const char *custom_html_tag){
   char *css_link = malloc(sizeof(char)*SM_BUFFER_MAX);
   if (css_link == NULL){
     fprintf(stderr, "css link malloc failed - get more memory");
+    goto STRING_OP_FAIL;
   }
 
   //construct css link for tempalte
@@ -105,6 +121,7 @@ char * build_template_tag(const char *filename, const char *custom_html_tag){
 
   if(output_len >= SM_BUFFER_MAX){
     fprintf(stderr, "Issue creating css link tag");
+    goto STRING_OP_FAIL;
   }
 
   //construct full template tag
@@ -112,6 +129,7 @@ char * build_template_tag(const char *filename, const char *custom_html_tag){
   if (full_tag == NULL){
     free(full_tag);
     fprintf(stderr, "malloc failed - get more memory");
+    goto STRING_OP_FAIL;
   }
   
   
@@ -122,7 +140,11 @@ char * build_template_tag(const char *filename, const char *custom_html_tag){
   
   if(output_len >= LG_BUFFER_MAX){
     fprintf(stderr, "Issue creating custom tag");
+    goto STRING_OP_FAIL;
   }
   free(css_link);
   return full_tag;
+
+ STRING_OP_FAIL:
+  return NULL;
 }
