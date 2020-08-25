@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "compgen.h"
 #define  LG_BUFFER_MAX 300
-#define  SM_BUFFER_MAX 150
+
 
 //main routine -- writes the .html, .js, .css
 int write_files(char *cwd, const char *filename, const char *js_class_name,
@@ -24,15 +24,8 @@ int write_files(char *cwd, const char *filename, const char *js_class_name,
 
     //switch on file extension type
     switch (i){
+      
     case 0:; //html file
-
-      char * custom_tag = build_custom_html_tag(custom_html_tag);
-      char * template_tag = build_template_tag(filename, custom_html_tag);
-      
-      if(custom_tag == NULL || template_tag == NULL){
-	return EXIT_FAILURE;
-      }
-      
       fprintf(f_ptr,
 	      "<!DOCTYPE html>\n"
 	      "<html>\n"
@@ -42,12 +35,17 @@ int write_files(char *cwd, const char *filename, const char *js_class_name,
 	      "\t<title></title>\n"
 	      "</head>\n"
 	      "<body>\n"
-	      "%s\n"
-	      "%s\n"
+	      "<%s></%s>\n"
+	      "<template id=\"%s\">\n"
+	      "\t<link rel=\"stylesheet\" href=\"./%s.css\">\n"
+	      "</template>\n"
 	      "</body>\n"
-	      "</html>\n", custom_tag, template_tag);
-      free(custom_tag);
-      free(template_tag);
+	      "</html>\n",
+	      custom_html_tag,
+	      custom_html_tag,
+	      custom_html_tag,
+	      filename);
+      
       break;
       
     case 1:       //js file
@@ -78,7 +76,7 @@ char * build_file_path(char *cwd, const char *filename, char *file_ext){
   if (full_path == NULL){
     free(full_path);
     fprintf(stderr, "malloc failed - get more memory");
-    goto STRING_OP_FAIL;
+    goto  string_op_fail;
   }
   
   output_len = snprintf(full_path,LG_BUFFER_MAX,
@@ -87,81 +85,12 @@ char * build_file_path(char *cwd, const char *filename, char *file_ext){
   if(output_len >= LG_BUFFER_MAX){
     fprintf(stderr, "your file path is likely corrupted due to\n"
 	    "buffer overrun");
-    goto STRING_OP_FAIL;
+    goto string_op_fail;
   }
   
   return full_path;
 
- STRING_OP_FAIL:
+ string_op_fail:
   return NULL;
 }
 
-//build the custom html tag
-char * build_custom_html_tag(const char *custom_html_tag){
-
-  int output_len = 0;
-  char* full_tag = malloc((strlen(custom_html_tag) * 2) +
-			  sizeof(char)*6); //account for <, >, <, /, >, \0 
-  if (full_tag == NULL){
-    free(full_tag);
-    fprintf(stderr, "malloc failed - get more memory");
-    goto STRING_OP_FAIL;
-  }
-  
-  output_len = snprintf(full_tag, SM_BUFFER_MAX,
-			"<%s></%s>", custom_html_tag, custom_html_tag);
-  
-  if(output_len >= SM_BUFFER_MAX){
-    fprintf(stderr, "Issue creating custom tag");
-    goto STRING_OP_FAIL;
-  }
-  return full_tag;
-
- STRING_OP_FAIL:
-  return NULL;
-}
-
-//construct the html template tag and add id
-char * build_template_tag(const char *filename, const char *custom_html_tag){
-
-  int output_len = 0;
-
-  char *css_link = malloc(sizeof(char)*SM_BUFFER_MAX);
-  if (css_link == NULL){
-    fprintf(stderr, "css link malloc failed - get more memory");
-    goto STRING_OP_FAIL;
-  }
-
-  //construct css link for tempalte
-  output_len = snprintf(css_link,SM_BUFFER_MAX,
-			"<link rel=\"stylesheet\" href=\"./%s.css\">", filename);
-
-  if(output_len >= SM_BUFFER_MAX){
-    fprintf(stderr, "Issue creating css link tag");
-    goto STRING_OP_FAIL;
-  }
-
-  //construct full template tag
-  char *full_tag = malloc(sizeof(char)*LG_BUFFER_MAX);  
-  if (full_tag == NULL){
-    free(full_tag);
-    fprintf(stderr, "malloc failed - get more memory");
-    goto STRING_OP_FAIL;
-  }
-  
-  
-  output_len = snprintf(full_tag,LG_BUFFER_MAX,
-			"<template id=\"%s\">\n"
-			"\t%s\n"
-			"</template>", custom_html_tag, css_link);
-  
-  if(output_len >= LG_BUFFER_MAX){
-    fprintf(stderr, "Issue creating custom tag");
-    goto STRING_OP_FAIL;
-  }
-  free(css_link);
-  return full_tag;
-
- STRING_OP_FAIL:
-  return NULL;
-}
