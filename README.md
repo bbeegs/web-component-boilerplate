@@ -5,9 +5,9 @@ It assumes the user will use a html template, it extends the HTMElement, and add
 the life-cycle hooks to the js.
 
 #### Example usage:
-
-_./comp-gen {filename} {js class name} {custom html tag}_<br>
-**./comp-gen my.custom.comp MyCustomComp my-custom-comp**<br>
+```d
+./comp-gen my.custom.comp MyCustomComp my-custom-comp
+```
 
 ## Output:
 3 files:<br>
