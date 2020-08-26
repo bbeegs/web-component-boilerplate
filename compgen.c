@@ -43,11 +43,13 @@ int write_files(char *cwd, const char *filename, const char *js_class_name,
 	      "<template id=\"%s\">\n"
 	      "\t<link rel=\"stylesheet\" href=\"./%s.css\">\n"
 	      "</template>\n"
+	      "<script src=\"./%s.js\"></script>\n"
 	      "</body>\n"
 	      "</html>\n",
 	      custom_html_tag,
 	      custom_html_tag,
 	      custom_html_tag,
+	      filename,
 	      filename);
       
       break;
