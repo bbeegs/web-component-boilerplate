@@ -15,6 +15,10 @@ int write_files(char *cwd, const char *filename, const char *js_class_name,
 
   for(size_t i = 0; i < 3; i++){
     char * filepath = build_file_path(cwd, filename,*(exts+i));
+    if (filepath == NULL){
+       fprintf(stderr, "Failure constructing file path");
+       return EXIT_FAILURE;
+    }
     f_ptr = fopen(filepath, "w");
     
     if(f_ptr == NULL){
@@ -107,6 +111,7 @@ char * build_file_path(char *cwd, const char *filename, char *file_ext){
   if(output_len >= LG_BUFFER_MAX){
     fprintf(stderr, "your file path is likely corrupted due to\n"
 	    "buffer overrun");
+    free(full_path);
     goto string_op_fail;
   }
   
