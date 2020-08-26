@@ -23,10 +23,11 @@ my.custom.comp.html, my.custom.comp.js, my.custom.comp.css
 	<title></title>
 </head>
 <body>
-<my-custom-comp></my-custom-comp>
-<template id="my-custom-comp">
-	<link rel="stylesheet" href="./my.custom.comp.css">
-</template>
+	<my-custom-comp></my-custom-comp>
+	<template id="my-custom-comp">
+		<link rel="stylesheet" href="./my.custom.comp.css">
+	</template>
+	<script src="./my.custom.comp.js"></script>
 </body>
 </html>
 ```
