@@ -1,7 +1,7 @@
 # web-component-boilerplate
 
 This script produces boilerplate html, javascript and css for an html web component.<br>
-It assumes the user will use a html template, it extends the HTMElement, and adds all<br>
+It assumes the use of html templates, it extends the HTMElement, and adds all<br>
 the life-cycle hooks to the js.
 
 #### Example usage:
