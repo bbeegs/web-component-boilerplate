@@ -14,7 +14,7 @@ int main(int argc, char **argv){
   const char *js_class_name;
   const char *custom_html_tag;
   
-  //check for the only arg that should be present
+  //check for the 3 args that should be present
   if(argc != EXPECTED_ARGS){
     fprintf(stderr,
 	    "Invalid argument length\n"

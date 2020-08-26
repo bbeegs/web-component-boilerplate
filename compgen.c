@@ -50,7 +50,29 @@ int write_files(char *cwd, const char *filename, const char *js_class_name,
       
     case 1:       //js file
       fprintf(f_ptr,
-	      "'use strict'");
+	      "'use strict'\n"
+	      "class %s extends HTMLElement {\n"
+	      "\tconstructor() {\n"
+	      "\t\tsuper();\n"
+	      "\t\tconst shadow = this.attachShadow({ mode: \"open\" });\n"
+	      "\t\tconst template = document.getElementById('%s');\n"
+	      "\t\tconst content = template.content.cloneNode(true);\n"
+	      "\t\tshadow.appendChild(content);\n"
+	      "\t}\n\n"
+	      "\tconnectedCallback() {\n\n"
+	      "\t}\n\n"
+	      "\tdisconnectedCallback() {\n\n"
+	      "\t}\n\n"  
+	      "\tattributeChangedCallback(name, oldValue, newValue) {\n"
+	      "\n\t}\n\n"
+	      "\tadoptedCallback() {\n\n"
+	      "\t}"
+	      "\n\n}\n\n"
+	      "window.customElements.define('%s', %s);\n"
+	      ,js_class_name,
+	      custom_html_tag,
+	      custom_html_tag,
+	      js_class_name);
       break;
       
     case 2:       //css file

@@ -1,10 +1,10 @@
 CC=gcc
 CFLAGS=-Wall -g
 
-all: main clean
+all: comp-gen clean
 
-main: main.c compgen.o
-	$(CC) -o main main.c compgen.o $(CFLAGS)
+comp-gen: main.c compgen.o
+	$(CC) -o comp-gen main.c compgen.o $(CFLAGS)
 
 compgen.o: compgen.c
 	$(CC) -c compgen.c $(CFLAGS)
