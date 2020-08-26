@@ -40,10 +40,10 @@ int write_files(char *cwd, const char *filename, const char *js_class_name,
 	      "</head>\n"
 	      "<body>\n"
 	      "<%s></%s>\n"
-	      "<template id=\"%s\">\n"
-	      "\t<link rel=\"stylesheet\" href=\"./%s.css\">\n"
-	      "</template>\n"
-	      "<script src=\"./%s.js\"></script>\n"
+	      "\t<template id=\"%s\">\n"
+	      "\t\t<link rel=\"stylesheet\" href=\"./%s.css\">\n"
+	      "\t</template>\n"
+	      "\t<script src=\"./%s.js\"></script>\n"
 	      "</body>\n"
 	      "</html>\n",
 	      custom_html_tag,
